@@ -6,14 +6,12 @@
     <!-- Product and plugin compatibility requirements -->
     <!-- https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
 
-    <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.darkkeks.intellijbulkrename.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.darkkeks.intellijbulkrename.services.MyProjectService"/>
-    </extensions>
-
-    <applicationListeners>
-        <listener class="com.github.darkkeks.intellijbulkrename.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </applicationListeners>
+    <actions>
+        <action class="com.github.darkkeks.intellijbulkrename.BulkRenameAction" id="BulkRenamePopupAction"
+                text="Bulk Rename">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+    </actions>
 </idea-plugin>
