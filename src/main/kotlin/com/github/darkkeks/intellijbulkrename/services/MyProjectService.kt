@@ -1,7 +1,7 @@
-package org.jetbrains.plugins.template.services
+package com.github.darkkeks.intellijbulkrename.services
 
+import com.github.darkkeks.intellijbulkrename.MyBundle
 import com.intellij.openapi.project.Project
-import org.jetbrains.plugins.template.MyBundle
 
 class MyProjectService(project: Project) {
 
