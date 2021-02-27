@@ -15,7 +15,6 @@ import javax.swing.JComponent
 import javax.swing.JPanel
 import javax.swing.JTextArea
 
-
 class BulkRenameAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.getRequiredData(CommonDataKeys.PROJECT)
@@ -44,25 +43,17 @@ class BulkRenameAction : AnAction() {
         val method = clazz.allMethods
             .find { it.name == fromMethod }
 
-        if (method == null) {
-//            Messages.showMessageDialog(
-//                project,
-//                "Cant find method $fromMethod in class ${clazz.name}",
-//                "Bulk Rename",
-//                null
-//            )
-            return true
+        if (method != null) {
+            val superMethods = method.findDeepestSuperMethods()
+            val toRename = superMethods.firstOrNull() ?: method
+
+            val refactoring = RefactoringFactory.getInstance(project)
+                .createRename(toRename, toMethod)
+            refactoring.isSearchInComments = false
+            refactoring.isSearchInNonJavaFiles = false
+            refactoring.setInteractive(null)
+            refactoring.run()
         }
-
-        val superMethods = method.findDeepestSuperMethods()
-        val toRename = superMethods.firstOrNull() ?: method
-
-        val refactoring = RefactoringFactory.getInstance(project)
-            .createRename(toRename, toMethod)
-        refactoring.isSearchInComments = false
-        refactoring.isSearchInNonJavaFiles = false
-        refactoring.setInteractive(null)
-        refactoring.run()
 
         return true
     }
@@ -72,7 +63,7 @@ class BulkRenameAction : AnAction() {
 
         override fun createCenterPanel(): JComponent {
             val dialogPanel = JPanel(BorderLayout())
-            field.preferredSize = Dimension(300, 200)
+            field.preferredSize = Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT)
             dialogPanel.add(field, BorderLayout.CENTER)
             return dialogPanel
         }
@@ -80,6 +71,11 @@ class BulkRenameAction : AnAction() {
         init {
             init()
             title = "Bulk Rename"
+        }
+
+        companion object {
+            const val DEFAULT_WIDTH = 300
+            const val DEFAULT_HEIGHT = 200
         }
     }
 }
